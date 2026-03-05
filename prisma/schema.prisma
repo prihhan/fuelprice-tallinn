@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Station {
+  id          String       @id @default(uuid())
+  name        String
+  brand       String
+  address     String
+  latitude    Float
+  longitude   Float
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  fuelPrices  FuelPrice[]
+  priceHistory PriceHistory[]
+
+  @@index([brand])
+  @@index([latitude, longitude])
+}
+
+model FuelPrice {
+  id          String    @id @default(uuid())
+  stationId   String
+  station     Station   @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  fuelType    String    // 95, 98, Diesel, LPG, CNG, Electric
+  price       Float
+  timestamp   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([stationId])
+  @@index([fuelType])
+  @@index([timestamp])
+}
+
+model PriceHistory {
+  id          String    @id @default(uuid())
+  stationId   String
+  station     Station   @relation(fields: [stationId], references: [id], onDelete: Cascade)
+  fuelType    String
+  price       Float
+  timestamp   DateTime  @default(now())
+
+  @@index([stationId, fuelType])
+  @@index([timestamp])
+}

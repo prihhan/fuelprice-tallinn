@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: fuelprice-db
+    environment:
+      POSTGRES_USER: fuelprice
+      POSTGRES_PASSWORD: fuelprice123
+      POSTGRES_DB: fuelprice_tallinn
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fuelprice"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: fuelprice-app
+    environment:
+      DATABASE_URL: postgresql://fuelprice:fuelprice123@postgres:5432/fuelprice_tallinn?schema=public
+      PORT: 3001
+      NODE_ENV: production
+      SCRAPER_INTERVAL_MINUTES: 30
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: sh -c "npx prisma db push && npm start"
+
+volumes:
+  postgres_data:
