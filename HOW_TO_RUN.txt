@@ -1,0 +1,246 @@
+================================================================================
+                    FUELPRICE TALLINN - HOW TO RUN
+================================================================================
+
+IMPORTANT: PowerShell Execution Policy Issue Detected
+------------------------------------------------------
+Your system has restrictions that prevent running npm commands in PowerShell.
+
+================================================================================
+                        EASIEST METHOD (RECOMMENDED)
+================================================================================
+
+METHOD 1: Double-Click the Batch File
+--------------------------------------
+1. Navigate to: C:\Users\Prihhan\Desktop\KIRO\fuelprice-tallinn
+2. Double-click: START_APP.bat
+3. Wait for installation and startup
+4. Open browser: http://localhost:3000
+
+That's it! The batch file handles everything automatically.
+
+================================================================================
+                        ALTERNATIVE METHODS
+================================================================================
+
+METHOD 2: Use Command Prompt (CMD)
+-----------------------------------
+1. Press Win+R, type "cmd", press Enter
+2. Run these commands:
+
+   cd C:\Users\Prihhan\Desktop\KIRO\fuelprice-tallinn
+   npm install
+   cd client
+   npm install
+   cd ..
+   npm run db:push
+   npm run db:generate
+   npm run dev
+
+3. Open browser: http://localhost:3000
+
+METHOD 3: Fix PowerShell Policy (One-time)
+-------------------------------------------
+1. Right-click PowerShell, select "Run as Administrator"
+2. Run this command:
+
+   Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+3. Type "Y" and press Enter
+4. Close PowerShell
+5. Open normal PowerShell and run:
+
+   cd C:\Users\Prihhan\Desktop\KIRO\fuelprice-tallinn
+   npm install
+   cd client
+   npm install
+   cd ..
+   npm run db:push
+   npm run db:generate
+   npm run dev
+
+6. Open browser: http://localhost:3000
+
+METHOD 4: Use Git Bash (if installed)
+--------------------------------------
+1. Right-click in the fuelprice-tallinn folder
+2. Select "Git Bash Here"
+3. Run these commands:
+
+   npm install
+   cd client && npm install && cd ..
+   npm run db:push
+   npm run db:generate
+   npm run dev
+
+4. Open browser: http://localhost:3000
+
+================================================================================
+                        WHAT TO EXPECT
+================================================================================
+
+When the application starts successfully, you will see:
+
+1. Console Output:
+   - "Server running on http://localhost:3001"
+   - "Starting fuel price scraping..."
+   - "✓ Alexela completed: 2 stations"
+   - "✓ Neste completed: 2 stations"
+   - etc.
+
+2. Browser (http://localhost:3000):
+   - Interactive map with station markers
+   - Navigation menu (Map, Stations, Analytics)
+   - Dark mode toggle
+   - Station information and prices
+
+3. API Endpoints (http://localhost:3001):
+   - /api/health - Health check
+   - /api/stations - All stations
+   - /api/prices - All prices
+
+================================================================================
+                        FEATURES AVAILABLE
+================================================================================
+
+MAP VIEW (Home Page)
+- Interactive OpenStreetMap
+- Station markers (click for details)
+- Fuel type filter
+- Real-time prices
+- Last updated timestamp
+
+STATIONS PAGE
+- Complete station list
+- Filter by brand (Alexela, Neste, Circle K, Olerex, Elenger)
+- Filter by fuel type (95, 98, Diesel, LPG, CNG, Electric)
+- Sort by price or name
+- Cheapest stations highlighted
+
+ANALYTICS PAGE
+- Price history charts
+- Select station and fuel type
+- View price trends
+- Statistics (current, average, range)
+
+GENERAL
+- Dark mode toggle
+- Mobile responsive
+- Fast and smooth
+
+================================================================================
+                        TROUBLESHOOTING
+================================================================================
+
+PROBLEM: "npm is not recognized"
+SOLUTION: Node.js is not in PATH. Restart your computer or add Node.js to PATH.
+
+PROBLEM: "Port 3000 already in use"
+SOLUTION: Another app is using port 3000. Close it or run:
+   netstat -ano | findstr :3000
+   taskkill /PID <PID> /F
+
+PROBLEM: "Cannot find module"
+SOLUTION: Dependencies not installed. Run:
+   npm install
+   cd client && npm install
+
+PROBLEM: "Prisma Client not generated"
+SOLUTION: Run:
+   npm run db:generate
+
+PROBLEM: Database errors
+SOLUTION: Delete and recreate database:
+   del prisma\dev.db
+   npm run db:push
+
+================================================================================
+                        QUICK VERIFICATION
+================================================================================
+
+After starting, verify everything works:
+
+1. Check Backend:
+   Open: http://localhost:3001/api/health
+   Should see: {"status":"ok","timestamp":"..."}
+
+2. Check Stations:
+   Open: http://localhost:3001/api/stations
+   Should see: JSON array with station data
+
+3. Check Frontend:
+   Open: http://localhost:3000
+   Should see: Map with station markers
+
+================================================================================
+                        STOPPING THE APPLICATION
+================================================================================
+
+To stop the application:
+1. Go to the terminal/command prompt window
+2. Press Ctrl+C
+3. Type "Y" if asked to terminate batch job
+
+================================================================================
+                        NEXT STEPS
+================================================================================
+
+After running successfully:
+
+1. EXPLORE THE APP
+   - Click on station markers
+   - Try different filters
+   - Check analytics page
+   - Toggle dark mode
+
+2. TEST FEATURES
+   - Sort stations by price
+   - Filter by fuel type
+   - View price history
+
+3. PUSH TO GITHUB
+   - See GIT_SETUP.md for instructions
+   - Repository: https://github.com/prihhan/fuelprice-tallinn
+
+4. IMPLEMENT REAL SCRAPERS
+   - Edit files in server/scrapers/
+   - Add actual web scraping logic
+   - Test with: npm run scrape
+
+5. DEPLOY TO PRODUCTION
+   - See DEPLOYMENT.md for instructions
+   - Choose hosting platform
+   - Configure domain and SSL
+
+================================================================================
+                        IMPORTANT NOTES
+================================================================================
+
+DATABASE: The application uses SQLite (file: prisma/dev.db) instead of 
+PostgreSQL for easier local development. No database installation required!
+
+MOCK DATA: The scrapers currently return mock data. Real scraping logic needs
+to be implemented in server/scrapers/*.js files.
+
+UPDATES: The scraper runs automatically every 30 minutes. You can also run it
+manually with: npm run scrape
+
+================================================================================
+                        NEED MORE HELP?
+================================================================================
+
+Documentation:
+- RUN_APPLICATION.md - Detailed running instructions
+- SETUP.md - Quick setup guide
+- README.md - Complete documentation
+- FINAL_INSTRUCTIONS.md - Next steps guide
+
+Support:
+- GitHub: https://github.com/prihhan/fuelprice-tallinn
+- Issues: https://github.com/prihhan/fuelprice-tallinn/issues
+
+================================================================================
+
+Good luck! Your FuelPrice Tallinn application is ready to run! 🚀
+
+================================================================================
